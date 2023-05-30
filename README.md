@@ -1,2 +1,4 @@
 # WHSheetViewController
-まだ名前も適当なので変わりそうな気もする
+
+iOS14以上対応
+シートヴュー作成lib
