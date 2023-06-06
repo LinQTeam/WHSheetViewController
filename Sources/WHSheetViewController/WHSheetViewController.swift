@@ -170,6 +170,20 @@ public class WHSheetViewController: UIViewController {
         set { self.contentViewController.contentBackgroundColor = newValue }
     }
 
+    // mapMode
+    public func useMapMode(_ check: Bool) {
+        if (check) {
+            allowPullingPastMaxHeight = false
+            allowPullingPastMinHeight = true
+
+            dismissOnPull = true
+            dismissOnOverlayTap = false
+            overlayColor = UIColor.clear
+
+            allowGestureThroughOverlay = true
+        }
+    }
+
     public init(controller: UIViewController, sizes: [WHSize] = [.intrinsic], options: WHOptions? = nil) {
         let options = options ?? WHOptions.default
         self.contentViewController = WHContentViewController(childViewController: controller, options: options)
