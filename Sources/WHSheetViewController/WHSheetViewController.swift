@@ -184,6 +184,29 @@ public class WHSheetViewController: UIViewController {
         }
     }
 
+    // close Button
+    public var closeFillButtonOn: Bool = false
+
+    private lazy var closeFillButton: UIButton = {
+        let button = UIButton()
+        button.frame = CGRect(x: self.view.bounds.midX - 26, y: self.view.bounds.height, width: 52, height: 44)
+        button.backgroundColor = UIColor(red: 0.298, green: 0.298, blue: 0.298, alpha: 1.0)
+        button.setTitle("x", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20)
+        button.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 10, bottom: 2, right: 10)
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 4
+        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    @objc func closeButtonTapped() {
+        closeFillButton.removeFromSuperview()
+        NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: nil)
+    }
+
     public init(controller: UIViewController, sizes: [WHSize] = [.intrinsic], options: WHOptions? = nil) {
         let options = options ?? WHOptions.default
         self.contentViewController = WHContentViewController(childViewController: controller, options: options)
@@ -435,6 +458,7 @@ public class WHSheetViewController: UIViewController {
 
             let animationDuration = TimeInterval(abs(velocity*0.0002) + 0.2)
 
+            // マイナスの時に表示を消す処理
             guard finalHeight > 0 || !self.dismissOnPull else {
                 // Dismiss
                 UIView.animate(
@@ -465,6 +489,16 @@ public class WHSheetViewController: UIViewController {
                         break
                     }
                 }
+                if point.y <= 0 {
+                    if closeFillButtonOn && (newSize == .fullscreen) {
+                        closeFillButton.removeFromSuperview()
+                        self.view.addSubview(closeFillButton)
+                        NSLayoutConstraint.activate([
+                            self.closeFillButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                            self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+                        ])
+                    }
+                }
             } else {
                 // 大きい場合
                 newSize = self.orderedSizes.first ?? self.currentSize
@@ -474,6 +508,9 @@ public class WHSheetViewController: UIViewController {
                     } else {
                         break
                     }
+                }
+                if closeFillButtonOn {
+                    closeFillButton.removeFromSuperview()
                 }
             }
             let previousSize = self.currentSize
