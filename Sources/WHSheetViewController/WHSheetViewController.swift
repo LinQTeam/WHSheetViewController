@@ -191,13 +191,12 @@ public class WHSheetViewController: UIViewController {
         let button = UIButton()
         button.frame = CGRect(x: self.view.bounds.midX - 26, y: self.view.bounds.height, width: 52, height: 44)
         button.backgroundColor = UIColor(red: 0.298, green: 0.298, blue: 0.298, alpha: 1.0)
-        button.setTitle("x", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 20)
-        button.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 10, bottom: 2, right: 10)
-        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.setImage(UIImage(systemName: "xmark",
+                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .heavy)), for: .normal)
+        button.tintColor = .white
+        button.contentEdgeInsets = UIEdgeInsets.init(top: 10, left: 17, bottom: 10, right: 17)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 4
+        button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -495,7 +494,7 @@ public class WHSheetViewController: UIViewController {
                         self.view.addSubview(closeFillButton)
                         NSLayoutConstraint.activate([
                             self.closeFillButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                            self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+                            self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
                         ])
                     }
                 }
