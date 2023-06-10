@@ -192,7 +192,7 @@ public class WHSheetViewController: UIViewController {
         button.frame = CGRect(x: self.view.bounds.midX - 26, y: self.view.bounds.height, width: 52, height: 44)
         button.backgroundColor = UIColor(red: 0.298, green: 0.298, blue: 0.298, alpha: 1.0)
         button.setImage(UIImage(systemName: "xmark",
-                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .heavy)), for: .normal)
+                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .black)), for: .normal)
         button.tintColor = .white
         button.contentEdgeInsets = UIEdgeInsets.init(top: 10, left: 17, bottom: 10, right: 17)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -205,6 +205,8 @@ public class WHSheetViewController: UIViewController {
         closeFillButton.removeFromSuperview()
         NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: nil)
     }
+
+    private var closeView: UIView = UIView()
 
     public init(controller: UIViewController, sizes: [WHSize] = [.intrinsic], options: WHOptions? = nil) {
         let options = options ?? WHOptions.default
@@ -497,6 +499,13 @@ public class WHSheetViewController: UIViewController {
                             self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
                         ])
                     }
+                    closeView.removeFromSuperview()
+                    print(self.view.safeAreaInsets.top)
+                    if self.view.safeAreaInsets.top < 21 {
+                        closeView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 20)
+                        closeView.backgroundColor = self.contentBackgroundColor
+                        self.view.addSubview(closeView)
+                    }
                 }
             } else {
                 // 大きい場合
@@ -510,6 +519,7 @@ public class WHSheetViewController: UIViewController {
                 }
                 if closeFillButtonOn {
                     closeFillButton.removeFromSuperview()
+                    closeView.removeFromSuperview()
                 }
             }
             let previousSize = self.currentSize
