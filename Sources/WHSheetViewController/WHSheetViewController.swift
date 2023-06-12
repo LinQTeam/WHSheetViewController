@@ -498,6 +498,10 @@ public class WHSheetViewController: UIViewController {
                             self.closeFillButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                             self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
                         ])
+                        UIView.animate(withDuration: 0.1, delay: 0.2, options: [.curveEaseOut], animations: {
+                            self.closeFillButton.alpha = 1
+                            self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom - 60, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
+                        })
                     }
                     closeView.removeFromSuperview()
                     print(self.view.safeAreaInsets.top)
@@ -519,6 +523,8 @@ public class WHSheetViewController: UIViewController {
                 }
                 if closeFillButtonOn {
                     closeFillButton.removeFromSuperview()
+                    self.closeFillButton.alpha = 0
+                    self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
                     closeView.removeFromSuperview()
                 }
             }
