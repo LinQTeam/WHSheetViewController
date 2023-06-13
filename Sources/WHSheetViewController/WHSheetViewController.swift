@@ -11,6 +11,9 @@ import UIKit
 public class WHSheetViewController: UIViewController {
     public private(set) var options: WHOptions
 
+    weak var delegate: WHSheetViewDelegate?
+
+
     /// Default true
     public static var autoAdjustToKeyboard = true
     /// キーボードの大きさに合わせるかどうか? Default false
@@ -449,6 +452,7 @@ public class WHSheetViewController: UIViewController {
             } else {
                 self.contentViewController.view.transform = CGAffineTransform.identity
             }
+            delegate?.preferredFrameChanged(frame: contentViewController.view.frame)
         case .ended:
             let velocity = (0.2 * gesture.velocity(in: self.view).y)
             var finalHeight = newHeight - offset - velocity
@@ -860,4 +864,9 @@ extension WHSheetViewController: UIViewControllerTransitioningDelegate {
         transition.presenting = false
         return transition
     }
+}
+
+
+protocol WHSheetViewDelegate: AnyObject {
+    func preferredFrameChanged(frame:CGRect)
 }
