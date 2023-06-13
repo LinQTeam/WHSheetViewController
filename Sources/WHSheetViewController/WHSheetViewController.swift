@@ -11,7 +11,7 @@ import UIKit
 public class WHSheetViewController: UIViewController {
     public private(set) var options: WHOptions
 
-    weak var delegate: WHSheetViewDelegate?
+    public weak var delegate: WHSheetViewDelegate?
 
 
     /// Default true
@@ -867,6 +867,6 @@ extension WHSheetViewController: UIViewControllerTransitioningDelegate {
 }
 
 
-protocol WHSheetViewDelegate: AnyObject {
+public protocol WHSheetViewDelegate: AnyObject {
     func preferredFrameChanged(frame:CGRect)
 }
