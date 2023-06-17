@@ -8,7 +8,7 @@
 import UIKit
 
 @available(iOS 13.0, *)
-public class WHSheetViewController: UIViewController, UIScrollViewDelegate {
+public class WHSheetViewController: UIViewController {
     public private(set) var options: WHOptions
 
     public weak var delegate: WHSheetViewDelegate?
@@ -49,6 +49,14 @@ public class WHSheetViewController: UIViewController, UIScrollViewDelegate {
             self.updateAccessibility()
         }
     }
+
+    /// 背景を透過してtapの動作を背面に委ねる
+    public var isTransparentPullBarView: Bool = false {
+        didSet {
+            self.contentViewController.pullBarView.isUserInteractionEnabled = isTransparentPullBarView
+        }
+    }
+
     /// ボタンをつかんでドラッグして、シートをコントロールするかどうかのスイッチ
     public var shouldRecognizePanGestureWithUIControls: Bool = true
 
@@ -173,9 +181,6 @@ public class WHSheetViewController: UIViewController, UIScrollViewDelegate {
         set { self.contentViewController.contentBackgroundColor = newValue }
     }
 
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        delegate?.preferredFrameChanged(frame: contentViewController.view.frame)
-    }
 
     // mapMode
     public func useMapMode(_ check: Bool) {
@@ -232,7 +237,6 @@ public class WHSheetViewController: UIViewController, UIScrollViewDelegate {
         self.updateOrderedSizes()
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
-        childScrollView?.delegate = self
     }
 
     public required init?(coder: NSCoder) {
@@ -876,6 +880,5 @@ extension WHSheetViewController: UIViewControllerTransitioningDelegate {
 
 
 public protocol WHSheetViewDelegate: AnyObject {
-    func preferredFrameChanged(frame:CGRect)
     func scrollChanged(frame:CGRect, state:UIGestureRecognizer.State)
 }
