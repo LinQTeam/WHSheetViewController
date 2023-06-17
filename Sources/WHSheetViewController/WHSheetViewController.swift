@@ -8,7 +8,7 @@
 import UIKit
 
 @available(iOS 13.0, *)
-public class WHSheetViewController: UIViewController {
+public class WHSheetViewController: UIViewController, UIScrollViewDelegate {
     public private(set) var options: WHOptions
 
     public weak var delegate: WHSheetViewDelegate?
@@ -173,6 +173,10 @@ public class WHSheetViewController: UIViewController {
         set { self.contentViewController.contentBackgroundColor = newValue }
     }
 
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        delegate?.preferredFrameChanged(frame: contentViewController.view.frame)
+    }
+
     // mapMode
     public func useMapMode(_ check: Bool) {
         if (check) {
@@ -228,6 +232,7 @@ public class WHSheetViewController: UIViewController {
         self.updateOrderedSizes()
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
+        childScrollView?.delegate = self
     }
 
     public required init?(coder: NSCoder) {
