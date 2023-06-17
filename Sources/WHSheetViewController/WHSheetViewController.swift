@@ -435,6 +435,10 @@ public class WHSheetViewController: UIViewController, UIScrollViewDelegate {
             }
         }
 
+
+
+        delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
+        
         switch gesture.state {
         case .cancelled, .failed:
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
@@ -457,7 +461,6 @@ public class WHSheetViewController: UIViewController, UIScrollViewDelegate {
             } else {
                 self.contentViewController.view.transform = CGAffineTransform.identity
             }
-            delegate?.preferredFrameChanged(frame: contentViewController.view.frame)
         case .ended:
             let velocity = (0.2 * gesture.velocity(in: self.view).y)
             var finalHeight = newHeight - offset - velocity
@@ -874,4 +877,5 @@ extension WHSheetViewController: UIViewControllerTransitioningDelegate {
 
 public protocol WHSheetViewDelegate: AnyObject {
     func preferredFrameChanged(frame:CGRect)
+    func scrollChanged(frame:CGRect, state:UIGestureRecognizer.State)
 }
