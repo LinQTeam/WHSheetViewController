@@ -49,14 +49,6 @@ public class WHSheetViewController: UIViewController {
             self.updateAccessibility()
         }
     }
-
-    /// 背景を透過してtapの動作を背面に委ねる
-    public var isTransparentPullBarView: Bool = false {
-        didSet {
-            self.contentViewController.pullBarView.isUserInteractionEnabled = isTransparentPullBarView
-        }
-    }
-
     /// ボタンをつかんでドラッグして、シートをコントロールするかどうかのスイッチ
     public var shouldRecognizePanGestureWithUIControls: Bool = true
 
