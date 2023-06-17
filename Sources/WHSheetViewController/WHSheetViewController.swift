@@ -173,7 +173,6 @@ public class WHSheetViewController: UIViewController {
         set { self.contentViewController.contentBackgroundColor = newValue }
     }
 
-
     // mapMode
     public func useMapMode(_ check: Bool) {
         if (check) {
@@ -430,8 +429,6 @@ public class WHSheetViewController: UIViewController {
                 newHeight = maxHeight
             }
         }
-
-
 
         delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
         
