@@ -91,6 +91,7 @@ public class WHSheetViewController: UIViewController {
         }
     }
 
+    /// default on
     public static var blurEffect: UIBlurEffect = {
         return UIBlurEffect(style: .prominent)
     }()
