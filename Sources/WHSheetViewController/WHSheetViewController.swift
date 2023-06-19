@@ -486,6 +486,7 @@ public class WHSheetViewController: UIViewController {
             }
 
             var newSize = self.currentSize
+            closeView.removeFromSuperview()
             if point.y < 0 {
                 // 高さのマイナスチェック
                 newSize = self.orderedSizes.last ?? self.currentSize
@@ -509,9 +510,7 @@ public class WHSheetViewController: UIViewController {
                             self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom - 60, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
                         })
                     }
-                    closeView.removeFromSuperview()
-                    print(self.view.safeAreaInsets.top)
-                    if self.view.safeAreaInsets.top < 21 {
+                    if self.view.safeAreaInsets.top < 21 && newSize == .fullscreen {
                         closeView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 20)
                         closeView.backgroundColor = self.contentBackgroundColor
                         self.view.addSubview(closeView)
