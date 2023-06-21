@@ -205,7 +205,7 @@ public class WHSheetViewController: UIViewController {
         return button
     }()
 
-    @objc func closeButtonTapped() {
+    @objc public func closeButtonTapped() {
         closeFillButton.removeFromSuperview()
         NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: nil)
     }
