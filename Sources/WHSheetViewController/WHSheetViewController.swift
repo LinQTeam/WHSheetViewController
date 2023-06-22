@@ -592,6 +592,8 @@ public class WHSheetViewController: UIViewController {
             } else {
                 self.dismiss(animated: true, completion: nil)
             }
+        } else {
+            self.attemptDismiss(animated: true)
         }
     }
 
