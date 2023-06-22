@@ -207,7 +207,7 @@ public class WHSheetViewController: UIViewController {
 
     @objc public func closeButtonTapped() {
         closeFillButton.removeFromSuperview()
-        NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: ["useInlineMode": self.options.useInlineMode])
     }
 
     private var closeView: UIView = UIView()
@@ -584,10 +584,14 @@ public class WHSheetViewController: UIViewController {
     }
 
     @objc func dismissNotification(_ notification: Notification) {
-        if self.options.useInlineMode == true {
-            self.attemptDismiss(animated: true)
-        } else {
-            self.dismiss(animated: true)
+        if let inlineMode = notification.userInfo?["useInlineMode"] as? Bool {
+            if inlineMode {
+                self.animateOut {
+                    self.didDismiss?(self)
+                }
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
         }
     }
 
