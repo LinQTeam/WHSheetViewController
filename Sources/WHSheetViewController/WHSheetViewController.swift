@@ -435,7 +435,7 @@ public class WHSheetViewController: UIViewController {
         
         switch gesture.state {
         case .cancelled, .failed:
-            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
                 self.contentViewController.view.transform = CGAffineTransform.identity
                 self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
                 self.transition.setPresentor(percentComplete: 0)
@@ -456,14 +456,14 @@ public class WHSheetViewController: UIViewController {
                 self.contentViewController.view.transform = CGAffineTransform.identity
             }
         case .ended:
-            let velocity = (0.2 * gesture.velocity(in: self.view).y)
+            let velocity = (self.options.totalDuration * gesture.velocity(in: self.view).y)
             var finalHeight = newHeight - offset - velocity
             if velocity > options.pullDismissThreshod {
                 // They swiped hard, always just close the sheet when they do
                 finalHeight = -1
             }
 
-            let animationDuration = TimeInterval(abs(velocity*0.0002) + 0.2)
+            let animationDuration = TimeInterval(abs(velocity*0.0002) + 0.1)
 
             // マイナスの時に表示を消す処理
             guard finalHeight > 0 || !self.dismissOnPull else {
@@ -505,7 +505,7 @@ public class WHSheetViewController: UIViewController {
                             self.closeFillButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                             self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
                         ])
-                        UIView.animate(withDuration: 0.1, delay: 0.2, options: [.curveEaseOut], animations: {
+                        UIView.animate(withDuration: self.options.totalDuration, delay: 0.1, options: [.curveEaseOut], animations: {
                             self.closeFillButton.alpha = 1
                             self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom - 60, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
                         })
@@ -708,7 +708,7 @@ public class WHSheetViewController: UIViewController {
     }
 
     /// インラインモードで表示している場合に限り、シートをアニメーションで表示します。
-    public func animateIn(to view: UIView, in parent: UIViewController, size: WHSize? = nil, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
+    public func animateIn(to view: UIView, in parent: UIViewController, size: WHSize? = nil, duration: TimeInterval = 0.2, completion: (() -> Void)? = nil) {
 
         self.willMove(toParent: parent)
         parent.addChild(self)
@@ -752,7 +752,7 @@ public class WHSheetViewController: UIViewController {
     }
 
     /// インラインモードで表示している場合に限り、シートをアニメーションさせます。
-    public func animateOut(duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
+    public func animateOut(duration: TimeInterval = 0.2, completion: (() -> Void)? = nil) {
         guard self.options.useInlineMode else { return }
         let contentView = self.contentViewController.view!
 

@@ -59,7 +59,7 @@ public class WHTransition: NSObject, UIViewControllerAnimatedTransitioning {
             }
 
             // アニメーション
-            UIView.animate(withDuration: self.options.transitionDuration * 0.6, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: self.options.transitionDuration * 0.1, delay: 0, options: [.curveEaseOut], animations: {
                 if self.options.shrinkPresentingViewController {
                     self.setPresentor(percentComplete: 0)
                 }
