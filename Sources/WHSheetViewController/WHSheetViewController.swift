@@ -210,8 +210,6 @@ public class WHSheetViewController: UIViewController {
         NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: ["useInlineMode": self.options.useInlineMode])
     }
 
-    private var closeView: UIView = UIView()
-
     public init(controller: UIViewController, sizes: [WHSize] = [.intrinsic], options: WHOptions? = nil) {
         let options = options ?? WHOptions.default
         self.contentViewController = WHContentViewController(childViewController: controller, options: options)
@@ -229,6 +227,7 @@ public class WHSheetViewController: UIViewController {
         self.updateOrderedSizes()
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
+        self.view.layer.removeAllAnimations()
     }
 
     public required init?(coder: NSCoder) {
@@ -435,6 +434,7 @@ public class WHSheetViewController: UIViewController {
         
         switch gesture.state {
         case .cancelled, .failed:
+            self.view.layer.removeAllAnimations()
             UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
                 self.contentViewController.view.transform = CGAffineTransform.identity
                 self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
@@ -468,6 +468,7 @@ public class WHSheetViewController: UIViewController {
             // マイナスの時に表示を消す処理
             guard finalHeight > 0 || !self.dismissOnPull else {
                 // Dismiss
+                self.view.layer.removeAllAnimations()
                 UIView.animate(
                     withDuration: animationDuration,
                     delay: 0,
@@ -486,7 +487,6 @@ public class WHSheetViewController: UIViewController {
             }
 
             var newSize = self.currentSize
-            closeView.removeFromSuperview()
             if point.y < 0 {
                 // 高さのマイナスチェック
                 newSize = self.orderedSizes.last ?? self.currentSize
@@ -505,19 +505,21 @@ public class WHSheetViewController: UIViewController {
                             self.closeFillButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                             self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
                         ])
+                        self.view.layer.removeAllAnimations()
                         UIView.animate(withDuration: self.options.totalDuration, delay: 0.1, options: [.curveEaseOut], animations: {
                             self.closeFillButton.alpha = 1
                             self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom - 60, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
                         })
                     }
                     if self.view.safeAreaInsets.top < 21 && newSize == .fullscreen {
-                        closeView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 20)
-                        closeView.backgroundColor = self.contentBackgroundColor
-                        self.view.addSubview(closeView)
+                        self.pullBarBackgroundColor = .white
                     }
                 }
             } else {
                 // 大きい場合
+                if self.view.safeAreaInsets.top < 21 {
+                    self.pullBarBackgroundColor = .clear
+                }
                 newSize = self.orderedSizes.first ?? self.currentSize
                 for size in self.orderedSizes {
                     if finalHeight > self.height(for: size) {
@@ -530,13 +532,13 @@ public class WHSheetViewController: UIViewController {
                     closeFillButton.removeFromSuperview()
                     self.closeFillButton.alpha = 0
                     self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
-                    closeView.removeFromSuperview()
                 }
             }
             let previousSize = self.currentSize
             self.currentSize = newSize
 
             let newContentHeight = self.height(for: newSize)
+            self.view.layer.removeAllAnimations()
             UIView.animate(
                 withDuration: animationDuration,
                 delay: 0,
@@ -662,6 +664,7 @@ public class WHSheetViewController: UIViewController {
         }
 
         if animated {
+            self.view.layer.removeAllAnimations()
             UIView.animate(withDuration: duration, delay: 0, options: options, animations: { [weak self] in
                 guard let self = self, let constraint = self.contentViewHeightConstraint else { return }
                 constraint.constant = newHeight
@@ -674,6 +677,7 @@ public class WHSheetViewController: UIViewController {
                 complete?()
             })
         } else {
+            self.view.layer.removeAllAnimations()
             UIView.performWithoutAnimation {
                 self.contentViewHeightConstraint?.constant = self.height(for: size)
                 self.contentViewController.view.layoutIfNeeded()
@@ -738,7 +742,8 @@ public class WHSheetViewController: UIViewController {
         contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
         self.overlayView.alpha = 0
         self.updateOrderedSizes()
-
+        
+        self.view.layer.removeAllAnimations()
         UIView.animate(
             withDuration: duration,
             animations: {
@@ -756,6 +761,7 @@ public class WHSheetViewController: UIViewController {
         guard self.options.useInlineMode else { return }
         let contentView = self.contentViewController.view!
 
+        self.view.layer.removeAllAnimations()
         UIView.animate(
             withDuration: duration,
             delay: 0,

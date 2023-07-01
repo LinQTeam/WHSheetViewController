@@ -109,6 +109,7 @@ public class WHContentViewController: UIViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.layer.removeAllAnimations()
         UIView.performWithoutAnimation {
             self.view.layoutIfNeeded()
         }
@@ -186,12 +187,14 @@ public class WHContentViewController: UIViewController {
         fittingSize.width = width;
 
         self.contentTopConstraint?.isActive = false
+        self.view.layer.removeAllAnimations()
         UIView.performWithoutAnimation {
             self.contentView.layoutSubviews()
         }
 
         self.preferredHeight = self.contentView.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
         self.contentTopConstraint?.isActive = true
+        self.view.layer.removeAllAnimations()
         UIView.performWithoutAnimation {
             self.contentView.layoutSubviews()
         }
@@ -241,7 +244,7 @@ public class WHContentViewController: UIViewController {
         self.contentView.addSubview(overflowView) {
             $0.edges(.left, .right).pinToSuperview()
             $0.height.set(200)
-            $0.top.align(with: self.contentView.al.bottom - 1)
+            $0.top.align(with: self.contentView.al.bottom - 0)
         }
     }
 
