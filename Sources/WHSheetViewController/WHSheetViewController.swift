@@ -512,7 +512,7 @@ public class WHSheetViewController: UIViewController {
                         })
                     }
                     if self.view.safeAreaInsets.top < 21 && newSize == .fullscreen {
-                        self.pullBarBackgroundColor = .white
+                        self.pullBarBackgroundColor = .clear
                     }
                 }
             } else {
