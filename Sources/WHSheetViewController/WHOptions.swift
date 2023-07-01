@@ -30,7 +30,7 @@ public struct WHOptions {
     public var transitionVelocity: CGFloat = 0.4
     public var transitionOverflowType: TransitionOverflowType = .automatic
 
-    public var pullDismissThreshod: CGFloat = 500.0
+    public var pullDismissThreshod: CGFloat = 60.0
 
     public var useFullScreenMode = true
     public var shrinkPresentingViewController = true
