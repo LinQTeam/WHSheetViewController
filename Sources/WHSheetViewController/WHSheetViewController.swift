@@ -512,13 +512,17 @@ public class WHSheetViewController: UIViewController {
                         })
                     }
                     if self.view.safeAreaInsets.top < 21 && newSize == .fullscreen {
-                        self.pullBarBackgroundColor = .clear
+                        self.pullBarBackgroundColor = self.childViewController.whViewController?.overlayColor
+                        self.gripColor = self.childViewController.whViewController?.overlayColor
+                        self.cornerRadius = 0
                     }
                 }
             } else {
                 // 大きい場合
                 if self.view.safeAreaInsets.top < 21 {
                     self.pullBarBackgroundColor = .clear
+                    self.gripColor = UIColor(white: 0.868, black: 0.1)
+                    self.cornerRadius = 12
                 }
                 newSize = self.orderedSizes.first ?? self.currentSize
                 for size in self.orderedSizes {
