@@ -9,7 +9,7 @@ import UIKit
 
 @available(iOS 13.0, *)
 extension UIViewController {
-    public var whViewController: WHSheetViewController? {
+    public var whSheetViewController: WHSheetViewController? {
         var parent = self.parent
         while let currentParent = parent {
             if let sheetViewController = currentParent as? WHSheetViewController {

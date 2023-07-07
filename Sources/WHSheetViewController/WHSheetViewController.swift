@@ -432,9 +432,14 @@ public class WHSheetViewController: UIViewController {
 
         delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
         
+        self.pullBarBackgroundColor = UIColor.clear
+        self.gripColor = UIColor(white: 0.868, black: 0.1)
+        self.cornerRadius = 12
+        
         switch gesture.state {
         case .cancelled, .failed:
             self.view.layer.removeAllAnimations()
+            
             UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
                 self.contentViewController.view.transform = CGAffineTransform.identity
                 self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
@@ -442,7 +447,9 @@ public class WHSheetViewController: UIViewController {
                 self.overlayView.alpha = 1
             }, completion: { _ in
                 self.isPanning = false
+                self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
             })
+            
 
         case .began, .changed:
             self.contentViewHeightConstraint.constant = newHeight
@@ -511,19 +518,13 @@ public class WHSheetViewController: UIViewController {
                             self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom - 60, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
                         })
                     }
-                    if self.view.safeAreaInsets.top < 21 && newSize == .fullscreen {
-                        self.pullBarBackgroundColor = self.childViewController.whViewController?.overlayColor
-                        self.gripColor = self.childViewController.whViewController?.overlayColor
+                    if newSize == .fullscreen {
+                        self.pullBarBackgroundColor = self.childViewController.whSheetViewController?.overlayColor
+                        self.gripColor = self.childViewController.whSheetViewController?.overlayColor
                         self.cornerRadius = 0
                     }
                 }
             } else {
-                // 大きい場合
-                if self.view.safeAreaInsets.top < 21 {
-                    self.pullBarBackgroundColor = .clear
-                    self.gripColor = UIColor(white: 0.868, black: 0.1)
-                    self.cornerRadius = 12
-                }
                 newSize = self.orderedSizes.first ?? self.currentSize
                 for size in self.orderedSizes {
                     if finalHeight > self.height(for: size) {
