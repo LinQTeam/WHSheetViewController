@@ -264,6 +264,7 @@ public class WHSheetViewController: UIViewController {
         super.viewWillAppear(animated)
         self.updateOrderedSizes()
         self.contentViewController.updatePreferredHeight()
+        self.contentViewHeightConstraint.constant = 0
         self.resize(to: self.currentSize, animated: false)
     }
 
