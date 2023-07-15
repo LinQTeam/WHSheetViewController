@@ -447,9 +447,11 @@ public class WHSheetViewController: UIViewController {
                 self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
                 self.transition.setPresentor(percentComplete: 0)
                 self.overlayView.alpha = 1
-            }, completion: { _ in
-                self.isPanning = false
-                self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
+            }, completion: { complete in
+                if (complete) {
+                    self.isPanning = false
+                    self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
+                }
             })
             
 
@@ -490,7 +492,9 @@ public class WHSheetViewController: UIViewController {
                         self.transition.setPresentor(percentComplete: 1)
                         self.overlayView.alpha = 0
                     }, completion: { complete in
-                        self.attemptDismiss(animated: false)
+                        if (complete) {
+                            self.attemptDismiss(animated: false)
+                        }
                     })
                 return
             }
@@ -559,11 +563,13 @@ public class WHSheetViewController: UIViewController {
                     self.overlayView.alpha = 1
                     self.view.layoutIfNeeded()
                 }, completion: { complete in
-                    self.isPanning = false
-                    if previousSize != newSize {
-                        self.sizeChanged?(self, newSize, newContentHeight)
+                    if (complete) {
+                        self.isPanning = false
+                        if previousSize != newSize {
+                            self.sizeChanged?(self, newSize, newContentHeight)
+                        }
+                        self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: .ended)
                     }
-                    self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: .ended)
                 })
         case .possible:
             break
@@ -677,13 +683,15 @@ public class WHSheetViewController: UIViewController {
                 guard let self = self, let constraint = self.contentViewHeightConstraint else { return }
                 constraint.constant = newHeight
                 self.contentViewController.view.layoutIfNeeded()
-            }, completion: { _ in
-                if previousSize != size {
-                    self.sizeChanged?(self, size, newHeight)
+            }, completion: { finishd in
+                if (finishd) {
+                    if previousSize != size {
+                        self.sizeChanged?(self, size, newHeight)
+                    }
+                    self.contentViewController.updateAfterLayout()
+                    self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: .ended)
+                    complete?()
                 }
-                self.contentViewController.updateAfterLayout()
-                self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: .ended)
-                complete?()
             })
         } else {
             self.contentViewController.view.layer.removeAllAnimations()
@@ -760,8 +768,10 @@ public class WHSheetViewController: UIViewController {
                 contentView.transform = .identity
                 self.overlayView.alpha = 1
             },
-            completion: { _ in
-                completion?()
+            completion: { finishd in
+                if (finishd) {
+                    completion?()
+                }
             }
         )
     }
@@ -782,11 +792,13 @@ public class WHSheetViewController: UIViewController {
                 contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
                 self.overlayView.alpha = 0
             },
-            completion: { _ in
-                self.view.removeFromSuperview()
-                self.removeFromParent()
-                self.delegate?.scrollChanged(frame: contentView.frame, state: .ended)
-                completion?()
+            completion: { finishd in
+                if (finishd) {
+                    self.view.removeFromSuperview()
+                    self.removeFromParent()
+                    self.delegate?.scrollChanged(frame: contentView.frame, state: .ended)
+                    completion?()
+                }
             }
         )
     }
