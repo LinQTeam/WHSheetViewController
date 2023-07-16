@@ -283,6 +283,16 @@ public class WHSheetViewController: UIViewController {
             self.didDismiss?(self)
         }
     }
+    
+    func nukeAllAnimations() {
+        self.view.subviews.forEach({$0.layer.removeAllAnimations()})
+        self.view.layer.removeAllAnimations()
+        self.view.layoutIfNeeded()
+    }
+    
+    deinit {
+        nukeAllAnimations()
+    }
 
     /// 上下に引っ張ると、子ビューのスクロールビューが跳ね返るのではなく、シートが大きくなったり縮んだりするように
     public func handleScrollView(_ scrollView: UIScrollView) {
