@@ -120,6 +120,12 @@ public class WHContentViewController: UIViewController {
         super.viewDidAppear(animated)
         self.updatePreferredHeight()
     }
+    
+    deinit {
+        self.view.subviews.forEach({$0.layer.removeAllAnimations()})
+        self.view.layer.removeAllAnimations()
+        self.view.layoutIfNeeded()
+    }
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -128,7 +134,6 @@ public class WHContentViewController: UIViewController {
 
     func updateAfterLayout() {
         self.size = self.childViewController.view.bounds.height
-        //self.updatePreferredHeight()
     }
 
     func adjustForKeyboard(height: CGFloat) {
