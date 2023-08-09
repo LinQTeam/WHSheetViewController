@@ -293,7 +293,13 @@ public class WHSheetViewController: UIViewController {
     deinit {
         nukeAllAnimations()
     }
-
+    
+    /// childControllerを後で変更出来る様に
+    public func setController(_ controller: UIViewController) {
+        self.contentViewController = WHContentViewController(childViewController: controller, options: self.options)
+        self.contentViewController.contentBackgroundColor = UIColor.systemBackground
+        self.updateOrderedSizes()
+    }
     /// 上下に引っ張ると、子ビューのスクロールビューが跳ね返るのではなく、シートが大きくなったり縮んだりするように
     public func handleScrollView(_ scrollView: UIScrollView) {
         scrollView.panGestureRecognizer.require(toFail: panGestureRecognizer)
