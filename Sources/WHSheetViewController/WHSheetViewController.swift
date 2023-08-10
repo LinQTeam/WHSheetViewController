@@ -52,6 +52,9 @@ public class WHSheetViewController: UIViewController {
     /// ボタンをつかんでドラッグして、シートをコントロールするかどうかのスイッチ
     public var shouldRecognizePanGestureWithUIControls: Bool = true
 
+    /// 閉じるボタンをタップした際にシートのリサイズをするフラグ
+    public var shouldResizeTapOnClose: Bool = false
+
     /// 現在のシートビュー
     public var childViewController: UIViewController {
         return self.contentViewController.childViewController
@@ -188,6 +191,17 @@ public class WHSheetViewController: UIViewController {
         }
     }
 
+    // PopsMode
+    public func usePopsMode(_ check: Bool) {
+        if (check) {
+            closeFillButtonOn = true
+            dismissOnPull = false
+            overlayColor = UIColor.clear
+            allowGestureThroughOverlay = true
+            shouldResizeTapOnClose = true
+        }
+    }
+
     // close Button
     public var closeFillButtonOn: Bool = false
 
@@ -207,7 +221,11 @@ public class WHSheetViewController: UIViewController {
 
     @objc public func closeButtonTapped() {
         closeFillButton.removeFromSuperview()
-        NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: ["useInlineMode": self.options.useInlineMode])
+        if shouldResizeTapOnClose {
+            self.resize(to: size ?? self.sizes.first ?? self.currentSize, animated: true)
+        }else{
+            NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: ["useInlineMode": self.options.useInlineMode])
+        }
     }
 
     public init(controller: UIViewController, sizes: [WHSize] = [.intrinsic], options: WHOptions? = nil) {
