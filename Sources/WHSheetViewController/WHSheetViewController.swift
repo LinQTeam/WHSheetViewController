@@ -222,7 +222,7 @@ public class WHSheetViewController: UIViewController {
     @objc public func closeButtonTapped() {
         closeFillButton.removeFromSuperview()
         if shouldResizeTapOnClose {
-            self.resize(to: size ?? self.sizes.first ?? self.currentSize, animated: true)
+            self.resize(to: self.sizes.first ?? self.currentSize, animated: true)
         }else{
             NotificationCenter.default.post(name: Notification.Name("closeView"), object: self, userInfo: ["useInlineMode": self.options.useInlineMode])
         }
