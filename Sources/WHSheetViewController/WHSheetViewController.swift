@@ -508,6 +508,9 @@ public class WHSheetViewController: UIViewController {
 
             if let cancelPanScrollGestureSize = cancelPanScrollGestureSize {
                 if newHeight < cancelPanScrollGestureSize {
+                    print("newHeight:\(newHeight)")
+                    print("cancelPanScrollGestureSize:\(cancelPanScrollGestureSize)")
+
                     self.contentViewController.view.layer.removeAllAnimations()
 
                     UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
