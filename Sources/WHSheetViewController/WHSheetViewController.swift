@@ -470,8 +470,7 @@ public class WHSheetViewController: UIViewController {
             }
         }
 
-        delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
-        
+
         self.pullBarBackgroundColor = UIColor.clear
         self.gripColor = UIColor(white: 0.868, black: 0.1)
         self.cornerRadius = 12
@@ -524,7 +523,6 @@ public class WHSheetViewController: UIViewController {
                             self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
                         }
                     })
-                    delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
                     return
                 }
             }
@@ -638,6 +636,8 @@ public class WHSheetViewController: UIViewController {
         @unknown default:
             break
         }
+
+        delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
     }
 
     private func registerKeyboardObservers() {
