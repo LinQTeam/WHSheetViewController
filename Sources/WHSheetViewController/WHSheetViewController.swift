@@ -584,27 +584,17 @@ public class WHSheetViewController: UIViewController {
 
             let newContentHeight = self.height(for: newSize)
             self.contentViewController.view.layer.removeAllAnimations()
-            UIView.animate(
-                withDuration: animationDuration,
-                delay: 0,
-                usingSpringWithDamping: self.options.transitionDampening,
-                initialSpringVelocity: self.options.transitionVelocity,
-                options: self.options.transitionAnimationOptions,
-                animations: {
-                    self.contentViewController.view.transform = CGAffineTransform.identity
-                    self.contentViewHeightConstraint.constant = newContentHeight
-                    self.transition.setPresentor(percentComplete: 0)
-                    self.overlayView.alpha = 1
-                    self.view.layoutIfNeeded()
-                }, completion: { complete in
-                    if (complete) {
-                        self.isPanning = false
-                        if previousSize != newSize {
-                            self.sizeChanged?(self, newSize, newContentHeight)
-                        }
-                        self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: .ended)
-                    }
-                })
+            UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
+                 self.contentViewController.view.transform = CGAffineTransform.identity
+                 self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
+                 self.transition.setPresentor(percentComplete: 0)
+                 self.overlayView.alpha = 1
+             }, completion: { complete in
+                 if (complete) {
+                     self.isPanning = false
+                     self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
+                 }
+             })
         case .possible:
             break
         @unknown default:
