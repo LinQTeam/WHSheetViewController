@@ -507,7 +507,7 @@ public class WHSheetViewController: UIViewController {
         case .ended:
 
             if let cancelPanScrollGestureSize = cancelPanScrollGestureSize {
-                if newHeight < cancelPanScrollGestureSize {
+                if newHeight < cancelPanScrollGestureSize && point.y < 0 {
                     print("newHeight:\(newHeight)")
                     print("cancelPanScrollGestureSize:\(cancelPanScrollGestureSize)")
 
@@ -524,6 +524,7 @@ public class WHSheetViewController: UIViewController {
                             self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
                         }
                     })
+                    delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
                     return
                 }
             }
