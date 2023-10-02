@@ -148,6 +148,9 @@ public class WHSheetViewController: UIViewController {
         set { self.contentViewController.treatPullBarAsClear = newValue }
     }
 
+
+    public var cancelPanScrollGestureSize: CGFloat?
+
     let transition: WHTransition
 
     public var shouldDismiss: ((WHSheetViewController) -> Bool)?
@@ -192,13 +195,14 @@ public class WHSheetViewController: UIViewController {
     }
 
     // PopsMode
-    public func usePopsMode(_ check: Bool) {
+    public func usePopsMode(_ check: Bool, cancelPanScrollGestureSize:CGFloat) {
         if (check) {
             closeFillButtonOn = true
             dismissOnPull = false
             overlayColor = UIColor.clear
             allowGestureThroughOverlay = true
             shouldResizeTapOnClose = true
+            self.cancelPanScrollGestureSize = cancelPanScrollGestureSize
         }
     }
 
@@ -502,21 +506,27 @@ public class WHSheetViewController: UIViewController {
             }
         case .ended:
 
-            self.contentViewController.view.layer.removeAllAnimations()
+            if let cancelPanScrollGestureSize = cancelPanScrollGestureSize{
+                if newHeight > cancelPanScrollGestureSize {
+                    self.contentViewController.view.layer.removeAllAnimations()
 
-            UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
-                self.contentViewController.view.transform = CGAffineTransform.identity
-                self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
-                self.transition.setPresentor(percentComplete: 0)
-                self.overlayView.alpha = 1
-            }, completion: { complete in
-                if (complete) {
-                    self.isPanning = false
-                    self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
+                    UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
+                        self.contentViewController.view.transform = CGAffineTransform.identity
+                        self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
+                        self.transition.setPresentor(percentComplete: 0)
+                        self.overlayView.alpha = 1
+                    }, completion: { complete in
+                        if (complete) {
+                            self.isPanning = false
+                            self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
+                        }
+                    })
+                    return
                 }
-            })
-            return
-            
+            }
+
+
+
             let velocity = (self.options.totalDuration * gesture.velocity(in: self.view).y)
             var finalHeight = newHeight - offset - velocity
             if velocity > options.pullDismissThreshod {
