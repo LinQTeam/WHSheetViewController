@@ -486,10 +486,10 @@ public class WHSheetViewController: UIViewController {
                 self.view.layoutIfNeeded()
                 self.transition.setPresentor(percentComplete: 0)
                 self.overlayView.alpha = 1
+                self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
             }, completion: { complete in
                 if (complete) {
                     self.isPanning = false
-                    self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
                 }
             })
             
