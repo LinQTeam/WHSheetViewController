@@ -510,11 +510,10 @@ public class WHSheetViewController: UIViewController {
             if let cancelPanScrollGestureSize = cancelPanScrollGestureSize {
                 if newHeight < cancelPanScrollGestureSize && point.y < 0 {
 
-                    self.contentViewController.view.layer.removeAllAnimations()
-
-                    UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
+                    UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseInOut], animations: {
                         self.contentViewController.view.transform = CGAffineTransform.identity
                         self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
+                        print(self.height(for: self.currentSize))
                         self.transition.setPresentor(percentComplete: 0)
                         self.overlayView.alpha = 1
                     }, completion: { complete in
