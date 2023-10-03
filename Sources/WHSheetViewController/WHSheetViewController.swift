@@ -513,6 +513,7 @@ public class WHSheetViewController: UIViewController {
                     UIView.animate(withDuration: 10, delay: 1, options: [.curveEaseInOut], animations: {
                         self.contentViewController.view.transform = CGAffineTransform.identity
                         self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
+                        self.view.layoutIfNeeded()
                         self.transition.setPresentor(percentComplete: 0)
                         self.overlayView.alpha = 1
                     }, completion: { complete in
@@ -533,8 +534,6 @@ public class WHSheetViewController: UIViewController {
                 // They swiped hard, always just close the sheet when they do
                 finalHeight = -1
             }
-
-            let animationDuration = TimeInterval(abs(velocity*0.0002) + 0.1)
 
             // マイナスの時に表示を消す処理
             guard finalHeight > 0 || !self.dismissOnPull else {
