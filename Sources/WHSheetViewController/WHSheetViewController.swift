@@ -512,7 +512,7 @@ public class WHSheetViewController: UIViewController {
 
                     self.contentViewController.view.layer.removeAllAnimations()
 
-                    UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
+                    UIView.animate(withDuration: 2, delay: 0, options: [.curveEaseInOut], animations: {
                         self.contentViewController.view.transform = CGAffineTransform.identity
                         self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
                         self.transition.setPresentor(percentComplete: 0)
