@@ -522,9 +522,8 @@ public class WHSheetViewController: UIViewController {
                     }, completion: { complete in
                         if (complete) {
                             self.isPanning = false
-                            self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
                         }
-                        self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: gesture.state)
+                        self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
                     })
 
                     return
@@ -615,7 +614,7 @@ public class WHSheetViewController: UIViewController {
             let newContentHeight = self.height(for: newSize)
             self.contentViewController.view.layer.removeAllAnimations()
             UIView.animate(
-                withDuration: self.options.totalDuration,
+                withDuration: animationDuration,
                 delay: 0,
                 usingSpringWithDamping: self.options.transitionDampening,
                 initialSpringVelocity: self.options.transitionVelocity,
