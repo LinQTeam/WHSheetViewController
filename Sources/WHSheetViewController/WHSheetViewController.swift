@@ -148,7 +148,7 @@ public class WHSheetViewController: UIViewController {
         set { self.contentViewController.treatPullBarAsClear = newValue }
     }
 
-
+    // この高さに満たない場合、移動をキャンセルする
     public var cancelPanScrollGestureSize: CGFloat?
 
     let transition: WHTransition
@@ -195,7 +195,7 @@ public class WHSheetViewController: UIViewController {
     }
 
     // PopsMode
-    public func usePopsMode(_ check: Bool, cancelPanScrollGestureSize:CGFloat) {
+    public func usePopsMode(_ check: Bool, cancelPanScrollGestureSize: CGFloat) {
         if (check) {
             closeFillButtonOn = true
             dismissOnPull = false
@@ -506,10 +506,9 @@ public class WHSheetViewController: UIViewController {
             }
         case .ended:
 
+            // スワイプする高さによって、移動をキャンセルする
             if let cancelPanScrollGestureSize = cancelPanScrollGestureSize {
                 if newHeight < cancelPanScrollGestureSize && point.y < 0 {
-                    print("newHeight:\(newHeight)")
-                    print("cancelPanScrollGestureSize:\(cancelPanScrollGestureSize)")
 
                     self.contentViewController.view.layer.removeAllAnimations()
 
@@ -522,7 +521,6 @@ public class WHSheetViewController: UIViewController {
                         if (complete) {
                             self.isPanning = false
                             self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: gesture.state)
-
                         }
                         self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: gesture.state)
                     })
