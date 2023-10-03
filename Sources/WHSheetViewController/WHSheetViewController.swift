@@ -512,7 +512,7 @@ public class WHSheetViewController: UIViewController {
 
                     self.contentViewController.view.layer.removeAllAnimations()
 
-                    UIView.animate(withDuration: 2, delay: 0, options: [.curveEaseInOut], animations: {
+                    UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
                         self.contentViewController.view.transform = CGAffineTransform.identity
                         self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
                         self.transition.setPresentor(percentComplete: 0)
@@ -543,7 +543,7 @@ public class WHSheetViewController: UIViewController {
                 // Dismiss
                 self.contentViewController.view.layer.removeAllAnimations()
                 UIView.animate(
-                    withDuration: animationDuration,
+                    withDuration: self.options.totalDuration,
                     delay: 0,
                     usingSpringWithDamping: self.options.transitionDampening,
                     initialSpringVelocity: self.options.transitionVelocity,
@@ -613,7 +613,7 @@ public class WHSheetViewController: UIViewController {
             let newContentHeight = self.height(for: newSize)
             self.contentViewController.view.layer.removeAllAnimations()
             UIView.animate(
-                withDuration: animationDuration,
+                withDuration: self.options.totalDuration,
                 delay: 0,
                 usingSpringWithDamping: self.options.transitionDampening,
                 initialSpringVelocity: self.options.transitionVelocity,
