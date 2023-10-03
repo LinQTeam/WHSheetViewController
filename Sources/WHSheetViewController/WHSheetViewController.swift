@@ -483,6 +483,7 @@ public class WHSheetViewController: UIViewController {
             UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
                 self.contentViewController.view.transform = CGAffineTransform.identity
                 self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
+                self.view.layoutIfNeeded()
                 self.transition.setPresentor(percentComplete: 0)
                 self.overlayView.alpha = 1
             }, completion: { complete in
@@ -510,7 +511,9 @@ public class WHSheetViewController: UIViewController {
             if let cancelPanScrollGestureSize = cancelPanScrollGestureSize {
                 if newHeight < cancelPanScrollGestureSize && point.y < 0 {
 
-                    UIView.animate(withDuration: 10, delay: 1, options: [.curveEaseInOut], animations: {
+                    self.contentViewController.view.layer.removeAllAnimations()
+
+                    UIView.animate(withDuration: self.options.totalDuration, delay: 0, options: [.curveEaseOut], animations: {
                         self.contentViewController.view.transform = CGAffineTransform.identity
                         self.contentViewHeightConstraint.constant = self.height(for: self.currentSize)
                         self.view.layoutIfNeeded()
@@ -535,12 +538,14 @@ public class WHSheetViewController: UIViewController {
                 finalHeight = -1
             }
 
+            let animationDuration = TimeInterval(abs(velocity*0.0002) + 0.1)
+
             // マイナスの時に表示を消す処理
             guard finalHeight > 0 || !self.dismissOnPull else {
                 // Dismiss
                 self.contentViewController.view.layer.removeAllAnimations()
                 UIView.animate(
-                    withDuration: self.options.totalDuration,
+                    withDuration: animationDuration,
                     delay: 0,
                     usingSpringWithDamping: self.options.transitionDampening,
                     initialSpringVelocity: self.options.transitionVelocity,
@@ -618,6 +623,7 @@ public class WHSheetViewController: UIViewController {
                 animations: {
                     self.contentViewController.view.transform = CGAffineTransform.identity
                     self.contentViewHeightConstraint.constant = newContentHeight
+                    self.view.layoutIfNeeded()
                     self.transition.setPresentor(percentComplete: 0)
                     self.overlayView.alpha = 1
                     self.view.layoutIfNeeded()
