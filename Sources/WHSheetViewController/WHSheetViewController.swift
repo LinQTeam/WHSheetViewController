@@ -496,6 +496,7 @@ public class WHSheetViewController: UIViewController {
 
         case .began, .changed:
             self.contentViewHeightConstraint.constant = newHeight
+            delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
 
             if offset > 0 {
                 let percent = max(0, min(1, offset / max(1, newHeight)))
@@ -613,6 +614,7 @@ public class WHSheetViewController: UIViewController {
 
             let newContentHeight = self.height(for: newSize)
             self.contentViewController.view.layer.removeAllAnimations()
+            
             UIView.animate(
                 withDuration: animationDuration,
                 delay: 0,
@@ -626,13 +628,13 @@ public class WHSheetViewController: UIViewController {
                     self.transition.setPresentor(percentComplete: 0)
                     self.overlayView.alpha = 1
                     self.view.layoutIfNeeded()
+                    self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: .ended)
                 }, completion: { complete in
                     if (complete) {
                         self.isPanning = false
                         if previousSize != newSize {
                             self.sizeChanged?(self, newSize, newContentHeight)
                         }
-                        self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: .ended)
                     }
                 })
         case .possible:
