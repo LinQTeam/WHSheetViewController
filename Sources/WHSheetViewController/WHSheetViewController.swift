@@ -615,6 +615,7 @@ public class WHSheetViewController: UIViewController {
             let newContentHeight = self.height(for: newSize)
             self.contentViewController.view.layer.removeAllAnimations()
             
+            self.delegate?.scrollChanged(frame: CGRect(x: self.contentViewController.view.frame.origin.x, y: self.contentViewController.view.frame.origin.y, width: self.contentViewController.view.frame.width, height: self.height(for: self.currentSize)), state: .ended)
             UIView.animate(
                 withDuration: animationDuration,
                 delay: 0,
@@ -628,7 +629,6 @@ public class WHSheetViewController: UIViewController {
                     self.transition.setPresentor(percentComplete: 0)
                     self.overlayView.alpha = 1
                     self.view.layoutIfNeeded()
-                    self.delegate?.scrollChanged(frame: self.contentViewController.view.frame, state: .ended)
                 }, completion: { complete in
                     if (complete) {
                         self.isPanning = false
