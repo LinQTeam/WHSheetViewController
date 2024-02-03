@@ -337,6 +337,11 @@ public class WHSheetViewController: UIViewController {
 
         self.resize(to: sizes[0], animated: animated)
     }
+    
+    /// closeFillButtonOnとは別で表示非表示を切り替える
+    public func setCloseButtonHidden(isHidden: Bool) {
+        closeFillButton.isHidden = isHidden
+    }
 
     func updateOrderedSizes() {
         var concreteSizes: [(WHSize, CGFloat)] = self.sizes.map {
