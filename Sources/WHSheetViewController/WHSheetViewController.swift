@@ -155,6 +155,7 @@ public class WHSheetViewController: UIViewController {
 
     public var shouldDismiss: ((WHSheetViewController) -> Bool)?
     public var didDismiss: ((WHSheetViewController) -> Void)?
+    public var willCloseModal: ((WHSheetViewController) -> Void)?
     public var sizeChanged: ((WHSheetViewController, WHSize, CGFloat) -> Void)?
     public var panGestureShouldBegin: ((UIPanGestureRecognizer) -> Bool?)?
 
@@ -406,6 +407,7 @@ public class WHSheetViewController: UIViewController {
 
     @objc func overlayTapped(_ gesture: UITapGestureRecognizer) {
         guard self.dismissOnOverlayTap else { return }
+        self.willCloseModal?(self)
         self.attemptDismiss(animated: true)
     }
 
@@ -549,6 +551,7 @@ public class WHSheetViewController: UIViewController {
             guard finalHeight > 0 || !self.dismissOnPull else {
                 // Dismiss
                 self.contentViewController.view.layer.removeAllAnimations()
+                self.willCloseModal?(self)
                 UIView.animate(
                     withDuration: animationDuration,
                     delay: 0,
