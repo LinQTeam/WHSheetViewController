@@ -407,6 +407,7 @@ public class WHSheetViewController: UIViewController {
 
     @objc func overlayTapped(_ gesture: UITapGestureRecognizer) {
         guard self.dismissOnOverlayTap else { return }
+        self.willCloseModal?(self)
         self.attemptDismiss(animated: true)
     }
 
