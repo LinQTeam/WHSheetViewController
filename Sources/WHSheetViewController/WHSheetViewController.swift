@@ -209,14 +209,16 @@ public class WHSheetViewController: UIViewController {
 
     // close Button
     public var closeFillButtonOn: Bool = false
+    public var closeFillButtonTintColor: UIColor = .white
+    public var closeFillButtonBackgroundColor: UIColor = UIColor(red: 0.298, green: 0.298, blue: 0.298, alpha: 1.0)
 
     private lazy var closeFillButton: UIButton = {
         let button = UIButton()
         button.frame = CGRect(x: self.view.bounds.midX - 26, y: self.view.bounds.height, width: 52, height: 44)
-        button.backgroundColor = UIColor(red: 0.298, green: 0.298, blue: 0.298, alpha: 1.0)
+        button.backgroundColor = closeFillButtonBackgroundColor
         button.setImage(UIImage(systemName: "xmark",
                                 withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .black)), for: .normal)
-        button.tintColor = .white
+        button.tintColor = closeFillButtonTintColor
         button.contentEdgeInsets = UIEdgeInsets.init(top: 10, left: 17, bottom: 10, right: 17)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 8
