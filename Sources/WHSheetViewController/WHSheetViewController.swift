@@ -209,19 +209,31 @@ public class WHSheetViewController: UIViewController {
 
     // close Button
     public var closeFillButtonOn: Bool = false
-    public var closeFillButtonTintColor: UIColor = .white
-    public var closeFillButtonBackgroundColor: UIColor = UIColor(red: 0.298, green: 0.298, blue: 0.298, alpha: 1.0)
+    private var closeFillButtonTintColor: UIColor = .white
+    private var closeFillButtonBackgroundColor: UIColor = UIColor(red: 0.298, green: 0.298, blue: 0.298, alpha: 1.0)
+    private var closeButtonNeonImage: UIImage? = nil
+
+    public func setCloseButtonColors(tintColor: UIColor, backgroundColor: UIColor, neonImage: UIImage?) {
+        closeFillButtonTintColor = tintColor
+        closeFillButtonBackgroundColor = backgroundColor
+        closeButtonNeonImage = neonImage
+    }
 
     private lazy var closeFillButton: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: self.view.bounds.midX - 26, y: self.view.bounds.height, width: 52, height: 44)
         button.backgroundColor = closeFillButtonBackgroundColor
-        button.setImage(UIImage(systemName: "xmark",
-                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .black)), for: .normal)
         button.tintColor = closeFillButtonTintColor
-        button.contentEdgeInsets = UIEdgeInsets.init(top: 10, left: 17, bottom: 10, right: 17)
+        if let closeButtonNeonImage {
+            button.setImage(closeButtonNeonImage, for: .normal)
+            button.frame = CGRect(x: self.view.bounds.midX - 26, y: self.view.bounds.height, width: 56, height: 50)
+        } else {
+            button.setImage(UIImage(systemName: "xmark",
+                                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .black)), for: .normal)
+            button.contentEdgeInsets = UIEdgeInsets.init(top: 10, left: 17, bottom: 10, right: 17)
+            button.layer.cornerRadius = 8
+            button.frame = CGRect(x: self.view.bounds.midX - 26, y: self.view.bounds.height, width: 52, height: 44)
+        }
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
