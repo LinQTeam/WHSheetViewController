@@ -611,7 +611,6 @@ public class WHSheetViewController: UIViewController {
                         })
                     }
                     if newSize == .fullscreen {
-                        self.pullBarBackgroundColor = self.childViewController.whSheetViewController?.overlayColor
                         self.gripColor = self.childViewController.whSheetViewController?.overlayColor
                         self.cornerRadius = 0
                     }
