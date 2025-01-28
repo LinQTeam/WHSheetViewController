@@ -117,7 +117,7 @@ public class WHSheetViewController: UIViewController {
         set { self.contentViewController.cornerRadius = newValue }
     }
 
-    public static var cornerCurve: CALayerCornerCurve = .circular
+    public static var cornerCurve: CALayerCornerCurve = .continuous
 
     public var cornerCurve: CALayerCornerCurve {
         get { return self.contentViewController.cornerCurve }

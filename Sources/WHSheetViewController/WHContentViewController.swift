@@ -24,7 +24,7 @@ public class WHContentViewController: UIViewController {
     private var _cornerCurve: Any? = nil
     public var cornerCurve: CALayerCornerCurve {
         get {
-            return _cornerCurve as? CALayerCornerCurve ?? CALayerCornerCurve.circular }
+            return _cornerCurve as? CALayerCornerCurve ?? CALayerCornerCurve.continuous }
         set {
             _cornerCurve = newValue
             self.updateCornerCurve()
