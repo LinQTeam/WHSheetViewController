@@ -13,8 +13,8 @@ public class WHContentViewController: UIViewController {
     public private(set) var childViewController: UIViewController
 
     private var options: WHOptions
-    private (set) var size: CGFloat = 0
-    private (set) var preferredHeight: CGFloat
+    private(set) var size: CGFloat = 0
+    private(set) var preferredHeight: CGFloat
 
     public var contentBackgroundColor: UIColor? {
         get { self.childContainerView.backgroundColor }
@@ -24,7 +24,7 @@ public class WHContentViewController: UIViewController {
     private var _cornerCurve: Any? = nil
     public var cornerCurve: CALayerCornerCurve {
         get {
-            return _cornerCurve as? CALayerCornerCurve ?? CALayerCornerCurve.circular }
+            return _cornerCurve as? CALayerCornerCurve ?? CALayerCornerCurve.continuous }
         set {
             _cornerCurve = newValue
             self.updateCornerCurve()

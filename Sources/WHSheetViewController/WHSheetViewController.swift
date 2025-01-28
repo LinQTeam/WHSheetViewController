@@ -117,7 +117,7 @@ public class WHSheetViewController: UIViewController {
         set { self.contentViewController.cornerRadius = newValue }
     }
 
-    public static var cornerCurve: CALayerCornerCurve = .circular
+    public static var cornerCurve: CALayerCornerCurve = .continuous
 
     public var cornerCurve: CALayerCornerCurve {
         get { return self.contentViewController.cornerCurve }
@@ -586,7 +586,7 @@ public class WHSheetViewController: UIViewController {
             }
 
             var newSize = self.currentSize
-            if point.y < 0 {
+            if point.y <= 0 {
                 // 高さのマイナスチェック
                 newSize = self.orderedSizes.last ?? self.currentSize
                 for size in self.orderedSizes.reversed() {
@@ -596,24 +596,23 @@ public class WHSheetViewController: UIViewController {
                         break
                     }
                 }
-                if point.y <= 0 {
-                    if closeFillButtonOn && (newSize == .fullscreen) {
-                        closeFillButton.removeFromSuperview()
-                        self.view.addSubview(closeFillButton)
-                        NSLayoutConstraint.activate([
-                            self.closeFillButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                            self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-                        ])
-                        self.view.layer.removeAllAnimations()
-                        UIView.animate(withDuration: self.options.totalDuration, delay: 0.1, options: [.curveEaseOut], animations: {
-                            self.closeFillButton.alpha = 1
-                            self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom - 60, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
-                        })
-                    }
-                    if newSize == .fullscreen {
-                        self.gripColor = self.childViewController.whSheetViewController?.overlayColor
-                        self.cornerRadius = 0
-                    }
+
+                if closeFillButtonOn && (newSize == .fullscreen) {
+                    closeFillButton.removeFromSuperview()
+                    self.view.addSubview(closeFillButton)
+                    NSLayoutConstraint.activate([
+                        self.closeFillButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                        self.closeFillButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+                    ])
+                    self.view.layer.removeAllAnimations()
+                    UIView.animate(withDuration: self.options.totalDuration, delay: 0.1, options: [.curveEaseOut], animations: {
+                        self.closeFillButton.alpha = 1
+                        self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom - 60, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
+                    })
+                }
+                if newSize == .fullscreen {
+                    self.gripColor = self.childViewController.whSheetViewController?.overlayColor
+                    self.cornerRadius = 0
                 }
             } else {
                 newSize = self.orderedSizes.first ?? self.currentSize
