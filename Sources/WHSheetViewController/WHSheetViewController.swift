@@ -586,7 +586,7 @@ public class WHSheetViewController: UIViewController {
             }
 
             var newSize = self.currentSize
-            if point.y < 0 {
+            if point.y <= 0 {
                 // 高さのマイナスチェック
                 newSize = self.orderedSizes.last ?? self.currentSize
                 for size in self.orderedSizes.reversed() {
