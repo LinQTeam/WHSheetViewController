@@ -610,10 +610,6 @@ public class WHSheetViewController: UIViewController {
                         self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom - 60, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
                     })
                 }
-                if newSize == .fullscreen {
-                    self.gripColor = self.childViewController.whSheetViewController?.overlayColor
-                    self.cornerRadius = 0
-                }
             } else {
                 newSize = self.orderedSizes.first ?? self.currentSize
                 for size in self.orderedSizes {
@@ -629,6 +625,12 @@ public class WHSheetViewController: UIViewController {
                     self.closeFillButton.frame = CGRect(x: self.closeFillButton.frame.origin.x, y: self.closeFillButton.frame.origin.y - self.view.safeAreaInsets.bottom, width: self.closeFillButton.frame.width, height: self.closeFillButton.frame.height)
                 }
             }
+
+            if newSize == .fullscreen {
+                self.gripColor = self.childViewController.whSheetViewController?.overlayColor
+                self.cornerRadius = 0
+            }
+
             let previousSize = self.currentSize
             self.currentSize = newSize
 
