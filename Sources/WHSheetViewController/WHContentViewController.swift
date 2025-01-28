@@ -13,8 +13,8 @@ public class WHContentViewController: UIViewController {
     public private(set) var childViewController: UIViewController
 
     private var options: WHOptions
-    private (set) var size: CGFloat = 0
-    private (set) var preferredHeight: CGFloat
+    private(set) var size: CGFloat = 0
+    private(set) var preferredHeight: CGFloat
 
     public var contentBackgroundColor: UIColor? {
         get { self.childContainerView.backgroundColor }
