@@ -850,18 +850,21 @@ public class WHSheetViewController: UIViewController {
         self.updateOrderedSizes()
         
         contentView.layer.removeAllAnimations()
-        UIView.animate(
-            withDuration: duration,
-            animations: {
-                contentView.transform = .identity
-                self.overlayView.alpha = 1
-            },
-            completion: { finishd in
-                if (finishd) {
-                    completion?()
+
+        DispatchQueue.main.async {
+            UIView.animate(
+                withDuration: duration,
+                animations: {
+                    contentView.transform = .identity
+                    self.overlayView.alpha = 1
+                },
+                completion: { finishd in
+                    if (finishd) {
+                        completion?()
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     /// インラインモードで表示している場合に限り、シートをアニメーションさせます。
