@@ -175,6 +175,9 @@ public class WHSheetViewController: UIViewController {
     private var panGestureRecognizer: InitialTouchPanGestureRecognizer!
     private var prePanHeight: CGFloat = 0
     private var isPanning: Bool = false
+    private var prePanGripColor: UIColor?
+    private var prePanPullBarBackgroundColor: UIColor?
+    private var prePanCornerRadius: CGFloat = 12
 
     public var contentBackgroundColor: UIColor? {
         get { self.contentViewController.contentBackgroundColor }
@@ -465,6 +468,9 @@ public class WHSheetViewController: UIViewController {
             self.firstPanPoint = point
             self.prePanHeight = self.contentViewController.view.bounds.height
             self.isPanning = true
+            self.prePanGripColor = self.gripColor
+            self.prePanPullBarBackgroundColor = self.pullBarBackgroundColor
+            self.prePanCornerRadius = self.cornerRadius
         }
 
         let minHeight: CGFloat = self.height(for: self.orderedSizes.first)
@@ -492,11 +498,7 @@ public class WHSheetViewController: UIViewController {
         }
 
         delegate?.scrollChanged(frame: contentViewController.view.frame, state: gesture.state)
-        
-        self.pullBarBackgroundColor = UIColor.clear
-        self.gripColor = UIColor(white: 0.868, black: 0.1)
-        self.cornerRadius = 12
-        
+
         switch gesture.state {
         case .cancelled, .failed:
             self.contentViewController.view.layer.removeAllAnimations()
@@ -629,6 +631,10 @@ public class WHSheetViewController: UIViewController {
             if newSize == .fullscreen {
                 self.gripColor = self.childViewController.whSheetViewController?.overlayColor
                 self.cornerRadius = 0
+            } else {
+                self.gripColor = self.prePanGripColor
+                self.pullBarBackgroundColor = self.prePanPullBarBackgroundColor
+                self.cornerRadius = self.prePanCornerRadius
             }
 
             let previousSize = self.currentSize
