@@ -708,7 +708,16 @@ public class WHSheetViewController: UIViewController {
     }
 
     private func adjustForKeyboard(height: CGFloat, from notification: Notification) {
-        guard self.autoAdjustToKeyboard, let info:[AnyHashable: Any] = notification.userInfo else { return }
+        // Keyboard notifications are global — every WHSheet receives every event.
+        // We own this event if the first responder is currently in our subtree, OR if
+        // it's a hide event and we previously had a non-zero keyboardHeight (meaning
+        // we accepted the matching show earlier — the responder has since resigned, so
+        // the subtree walk would miss it, but we still need to resize back).
+        guard self.autoAdjustToKeyboard,
+              let info: [AnyHashable: Any] = notification.userInfo,
+              (self.viewIfLoaded?.containsFirstResponderInSubtree == true)
+                || (height == 0 && self.keyboardHeight > 0)
+        else { return }
         self.keyboardHeight = height
 
         let duration:TimeInterval = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
@@ -1002,4 +1011,11 @@ extension WHSheetViewController: UIViewControllerTransitioningDelegate {
 
 public protocol WHSheetViewDelegate: AnyObject {
     func scrollChanged(frame:CGRect, state:UIGestureRecognizer.State)
+}
+
+fileprivate extension UIView {
+    var containsFirstResponderInSubtree: Bool {
+        if isFirstResponder { return true }
+        return subviews.contains(where: { $0.containsFirstResponderInSubtree })
+    }
 }
